@@ -47,7 +47,7 @@
             min-height: 1.2em; 
         }
 
-        /* Countdown Timer Styling (Optimized for mobile stacking) */
+        /* Countdown Timer Styling (Fixed for stacking) */
         #countdown {
             display: flex;
             justify-content: center;
@@ -101,7 +101,7 @@
             position: relative;
             width: 90vw; 
             max-width: 600px;
-            height: 100px; 
+            height: 100px; /* Space for the images */
             margin-top: 20px;
             border-bottom: 5px solid #ccc; /* The 'road' line */
         }
@@ -109,33 +109,50 @@
         /* General styles for image containers */
         #cyclist, #cake {
             position: absolute;
-            bottom: -5px; /* Aligns the bottom of the image container with the road line */
+            /* We set the bottom position on the IMG, not the container, for max control */
             height: auto; 
+            width: auto; 
+            padding: 0;
+            margin: 0;
             transition: left 1s linear; 
         }
 
         /* --- CYCLIST (Girl) --- */
         #cyclist {
             left: 0%; 
-            width: 70px; /* Container width */
         }
+
         /* Style the actual IMG tag inside the container */
         #cyclist img {
-            width: 100%;
+            /* CRITICAL FIX: Ensure image base aligns perfectly to the road line */
+            position: absolute;
+            bottom: 0px; 
+            
+            /* Enforce small size to prevent mobile scaling issues */
+            width: 70px;
+            height: 70px; 
+            max-width: 70px;
+            max-height: 70px;
             display: block;
-            vertical-align: bottom; /* Ensures image base sits exactly on the line */
         }
 
         /* --- CAKE (Finish Line) --- */
         #cake {
             right: 0px; 
-            width: 100px; /* Container width */
         }
+
         /* Style the actual IMG tag inside the container */
         #cake img {
-            width: 100%;
+             /* CRITICAL FIX: Ensure image base aligns perfectly to the road line */
+            position: absolute;
+            bottom: 0px; 
+            
+            /* Enforce size to prevent mobile scaling issues */
+            width: 100px; 
+            height: 100px;
+            max-width: 100px;
+            max-height: 100px;
             display: block;
-            vertical-align: bottom; 
         }
         
         .finish-message {
@@ -150,7 +167,7 @@
 <body>
 
     <div class="container">
-        <h1 id="greeting">Cake, Candles, Countdown!</h1>
+        <h1 id="greeting">The Birthday Countdown Has Begun!</h1>
         <p id="message">Time left until the big day:</p>
         
         <div id="countdown">
@@ -183,11 +200,11 @@
     </div>
 
     <div id="finish-text" class="finish-message">
-        HAPPY BIRTHDAY GRACE! 🎂🥳
+        HAPPY BIRTHDAY! 🎂🥳
     </div>
 
     <script>
-        // JavaScript remains the same for functionality
+        // --- JavaScript Logic (Calculates time and moves the cyclist) ---
         const targetDateString = getComputedStyle(document.documentElement)
                                  .getPropertyValue('--birthday-target')
                                  .trim().replace(/"/g, '');
