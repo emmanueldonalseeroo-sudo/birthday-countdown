@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Countdown!</title>
+    <style>
+        /* --- TARGET DATE: 26 OCTOBER 2025 @ Midnight, Milan (UTC+02:00) --- */
+        :root {
+            --birthday-target: "2025-10-26T00:00:00+02:00"; 
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f7f7f7;
+            color: #333;
+            text-align: center;
+            overflow: hidden; 
+        }
+
+        .container {
+            max-width: 90%;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #e94e77;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        #message {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            min-height: 1.2em; 
+        }
+
+        /* Countdown Timer Styling */
+        #countdown {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .timer-box {
+            background-color: #5bc0de;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            min-width: 80px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .timer-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            display: block;
+        }
+
+        .timer-label {
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+        }
+        
+        /* Progress Bar and Visuals */
+        .progress-track {
+            position: relative;
+            width: 80vw; 
+            max-width: 600px;
+            height: 100px; 
+            margin-top: 20px;
+            border-bottom: 5px solid #ccc; /* The 'road' line */
+        }
+
+        /* --- CYCLIST (Girl) --- */
+        #cyclist {
+            position: absolute;
+            bottom: -5px; 
+            left: 0%; 
+            width: 70px; /* Adjust size here if your image is larger/smaller */
+            height: 70px; 
+            transition: left 1s linear; 
+            
+            /* Use your image file: girl.png */
+            background-image: url('girl.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center bottom;
+        }
+        
+        /* --- CAKE (Finish Line) --- */
+        #cake {
+            position: absolute;
+            bottom: -5px; 
+            right: 0px; 
+            width: 100px; /* Adjust size here if your image is larger/smaller */
+            height: 100px; 
+            
+            /* Use your image file: cake.png */
+            background-image: url('cake.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center bottom;
+        }
+        
+        .finish-message {
+            color: #e94e77;
+            font-size: 3em;
+            font-weight: bold;
+            margin-top: 50px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 id="greeting">Cake, Candles, Countdown!</h1>
+        <p id="message">Time left until the big day:</p>
+        
+        <div id="countdown">
+            <div class="timer-box">
+                <span id="days" class="timer-value">00</span>
+                <span class="timer-label">Days</span>
+            </div>
+            <div class="timer-box">
+                <span id="hours" class="timer-value">00</span>
+                <span class="timer-label">Hours</span>
+            </div>
+            <div class="timer-box">
+                <span id="minutes" class="timer-value">00</span>
+                <span class="timer-label">Minutes</span>
+            </div>
+            <div class="timer-box">
+                <span id="seconds" class="timer-value">00</span>
+                <span class="timer-label">Seconds</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="progress-track">
+        <div id="cyclist"></div>
+        <div id="cake"></div>
+    </div>
+
+    <div id="finish-text" class="finish-message">
+        HAPPY BIRTHDAY! 🎂🥳
+    </div>
+
+    <script>
+        // --- JavaScript Logic (Calculates time and moves the cyclist) ---
+        const targetDateString = getComputedStyle(document.documentElement)
+                                 .getPropertyValue('--birthday-target')
+                                 .trim().replace(/"/g, '');
+        const birthdayDate = new Date(targetDateString).getTime(); 
+        
+        const daysEl = document.getElementById('days');
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+        const cyclistEl = document.getElementById('cyclist');
+        const messageEl = document.getElementById('message');
+        const countdownContainer = document.getElementById('countdown');
+        const finishTextEl = document.getElementById('finish-text');
+        
+        const formatTime = (time) => time < 10 ? `0${time}` : time;
+
+        // The journey visually tracks the final 7 days leading up to the birthday.
+        const journeyDurationMs = 7 * 24 * 60 * 60 * 1000; 
+        const startOfJourney = birthdayDate - journeyDurationMs;
+
+        // Max horizontal position for the cyclist element (stops before hitting the cake)
+        const maxPosition = 85; 
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = birthdayDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            if (distance > 0) {
+                daysEl.textContent = formatTime(days);
+                hoursEl.textContent = formatTime(hours);
+                minutesEl.textContent = formatTime(minutes);
+                secondsEl.textContent = formatTime(seconds);
+                
+                // Progress Bar Logic
+                let progressPercentage = 0;
+                
+                if (now >= startOfJourney) {
+                    const timeElapsedInJourney = now - startOfJourney;
+                    // Calculate percentage of time *ELAPSED* in the journey
+                    progressPercentage = Math.min(100, (timeElapsedInJourney / journeyDurationMs) * 100);
+                }
+                
+                // MOVEMENT: Left (0%) to Right (85%)
+                const cyclistPosition = (progressPercentage / 100) * maxPosition; 
+
+                cyclistEl.style.left = `${cyclistPosition}%`;
+
+            } else {
+                // Birthday is here!
+                clearInterval(interval);
+                
+                messageEl.textContent = "It's time!";
+                document.getElementById('greeting').textContent = '🥳 Happy Birthday! 🥳';
+                countdownContainer.style.display = 'none';
+                document.querySelector('.progress-track').style.borderBottom = 'none';
+                finishTextEl.style.display = 'block';
+                
+                // Ensure final position is at the cake
+                cyclistEl.style.left = `${maxPosition}%`; 
+            }
+        }
+
+        updateCountdown();
+        const interval = setInterval(updateCountdown, 1000);
+        
+    </script>
+</body>
+</html>
