@@ -37,6 +37,7 @@
 
         h1 {
             color: #e94e77;
+            /* Font scales nicely on mobile but stops growing on desktop */
             font-size: min(2.5em, 7vw); 
             margin-bottom: 10px;
         }
@@ -51,7 +52,7 @@
         #countdown {
             display: flex;
             justify-content: center;
-            gap: 10px; 
+            gap: 10px; /* Space between boxes */
             margin-bottom: 30px;
             flex-wrap: wrap; 
         }
@@ -61,9 +62,33 @@
             color: white;
             padding: 15px 10px; 
             border-radius: 10px;
-            flex: 1 1 20%; 
-            max-width: 120px; 
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            
+            /* --- ALIGNMENT FIX FOR MOBILE: --- */
+            /* Enforce equal width on mobile to ensure four boxes fit */
+            flex: 1 1 20%; 
+            max-width: 120px; /* Maximum width for desktop */
+        }
+        
+        /* Media Query to ensure boxes don't get squeezed too small on iPhone */
+        @media (max-width: 500px) {
+            .timer-box {
+                /* Set a fixed percentage width slightly less than 25% to account for gaps */
+                flex: 0 1 22%; 
+                padding: 10px 5px; /* Reduce padding slightly */
+            }
+        }
+
+        /* Media Query to handle extremely small/portrait screens (e.g., iPhone SE) */
+        @media (max-width: 340px) {
+            .timer-box {
+                /* Allow 2x2 wrapping, ensuring two boxes take up about half the width each */
+                flex: 1 1 45%; 
+                margin-bottom: 10px; /* Space between rows */
+            }
+            #countdown {
+                justify-content: space-evenly;
+            }
         }
 
         .timer-value {
@@ -98,7 +123,6 @@
             height: 70px; 
             transition: left 1s linear; 
             
-            /* **ENSURE THIS FILE NAME IS CORRECT** */
             background-image: url('girl.png');
             background-size: contain;
             background-repeat: no-repeat;
@@ -113,7 +137,6 @@
             width: 100px; 
             height: 100px; 
             
-            /* **ENSURE THIS FILE NAME IS CORRECT** */
             background-image: url('cake.png');
             background-size: contain;
             background-repeat: no-repeat;
@@ -132,7 +155,7 @@
 <body>
 
     <div class="container">
-        <h1 id="greeting">Cake, Candles, Countdown!</</h1>
+        <h1 id="greeting">Cake, Candles, Countdown!</h1>
         <p id="message">Time left until the big day:</p>
         
         <div id="countdown">
@@ -161,7 +184,7 @@
     </div>
 
     <div id="finish-text" class="finish-message">
-        HAPPY BIRTHDAY GRACE! 🎂🥳
+        HAPPY BIRTHDAY Grace! 🎂🥳
     </div>
 
     <script>
