@@ -47,13 +47,15 @@
             min-height: 1.2em; 
         }
 
-        /* Countdown Timer Styling (Fixed for stacking) */
+        /* Countdown Timer Styling */
         #countdown {
             display: flex;
-            justify-content: center;
-            gap: 10px; 
+            /* Use space-between for better gap distribution */
+            justify-content: space-between; 
             margin-bottom: 30px;
             flex-wrap: wrap; 
+            /* Remove gap property since we use space-between for main alignment */
+            padding: 0 5px; 
         }
 
         .timer-box {
@@ -62,21 +64,31 @@
             padding: 15px 10px; 
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            flex: 1 1 20%; 
+            
+            /* Default for desktop/larger screens */
+            flex: 0 0 calc(25% - 15px); /* Forces 4 boxes with small gaps */
             max-width: 120px; 
         }
         
+        /* FIX FOR MOBILE STACKING (Critical change here) */
         @media (max-width: 500px) {
+            #countdown {
+                 gap: 5px; /* Re-introduce small gaps here */
+                 justify-content: center; /* Center boxes instead of space-between */
+            }
             .timer-box {
-                flex: 0 1 22%; 
+                /* Forces four boxes to fit on one row */
+                flex: 0 1 23%; 
                 padding: 10px 5px; 
             }
         }
 
+        /* Handle extremely small screens (2x2 layout) */
         @media (max-width: 340px) {
             .timer-box {
+                /* Allow 2x2 wrapping */
                 flex: 1 1 45%; 
-                margin-bottom: 10px; 
+                margin-bottom: 5px; 
             }
             #countdown {
                 justify-content: space-evenly;
@@ -101,7 +113,7 @@
             position: relative;
             width: 90vw; 
             max-width: 600px;
-            height: 100px; /* Space for the images */
+            height: 100px; 
             margin-top: 20px;
             border-bottom: 5px solid #ccc; /* The 'road' line */
         }
@@ -109,7 +121,6 @@
         /* General styles for image containers */
         #cyclist, #cake {
             position: absolute;
-            /* We set the bottom position on the IMG, not the container, for max control */
             height: auto; 
             width: auto; 
             padding: 0;
@@ -126,9 +137,9 @@
         #cyclist img {
             /* CRITICAL FIX: Ensure image base aligns perfectly to the road line */
             position: absolute;
-            bottom: 0px; 
+            bottom: 0px; /* Aligns base of image to the bottom of the track (which is the road line) */
             
-            /* Enforce small size to prevent mobile scaling issues */
+            /* Enforce size for consistency */
             width: 70px;
             height: 70px; 
             max-width: 70px;
@@ -147,7 +158,7 @@
             position: absolute;
             bottom: 0px; 
             
-            /* Enforce size to prevent mobile scaling issues */
+            /* Enforce size for consistency */
             width: 100px; 
             height: 100px;
             max-width: 100px;
