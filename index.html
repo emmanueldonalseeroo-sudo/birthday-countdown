@@ -21,11 +21,13 @@
             background-color: #f7f7f7;
             color: #333;
             text-align: center;
-            overflow: hidden; 
+            padding: 10px;
+            box-sizing: border-box; 
         }
 
         .container {
-            max-width: 90%;
+            width: 100%; 
+            max-width: 600px; 
             padding: 20px;
             background: white;
             border-radius: 15px;
@@ -35,7 +37,7 @@
 
         h1 {
             color: #e94e77;
-            font-size: 2.5em;
+            font-size: min(2.5em, 7vw); 
             margin-bottom: 10px;
         }
 
@@ -49,27 +51,29 @@
         #countdown {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 10px; 
             margin-bottom: 30px;
+            flex-wrap: wrap; 
         }
 
         .timer-box {
             background-color: #5bc0de;
             color: white;
-            padding: 15px;
+            padding: 15px 10px; 
             border-radius: 10px;
-            min-width: 80px;
+            flex: 1 1 20%; 
+            max-width: 120px; 
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .timer-value {
-            font-size: 2.5em;
+            font-size: min(2.5em, 8vw); 
             font-weight: bold;
             display: block;
         }
 
         .timer-label {
-            font-size: 0.8em;
+            font-size: 0.7em; 
             text-transform: uppercase;
             letter-spacing: 1px;
             display: block;
@@ -78,11 +82,11 @@
         /* Progress Bar and Visuals */
         .progress-track {
             position: relative;
-            width: 80vw; 
+            width: 90vw; 
             max-width: 600px;
             height: 100px; 
             margin-top: 20px;
-            border-bottom: 5px solid #ccc; /* The 'road' line */
+            border-bottom: 5px solid #ccc; 
         }
 
         /* --- CYCLIST (Girl) --- */
@@ -90,11 +94,11 @@
             position: absolute;
             bottom: -5px; 
             left: 0%; 
-            width: 70px; /* Adjust size here if your image is larger/smaller */
+            width: 70px; 
             height: 70px; 
             transition: left 1s linear; 
             
-            /* Use your image file: girl.png */
+            /* **ENSURE THIS FILE NAME IS CORRECT** */
             background-image: url('girl.png');
             background-size: contain;
             background-repeat: no-repeat;
@@ -106,10 +110,10 @@
             position: absolute;
             bottom: -5px; 
             right: 0px; 
-            width: 100px; /* Adjust size here if your image is larger/smaller */
+            width: 100px; 
             height: 100px; 
             
-            /* Use your image file: cake.png */
+            /* **ENSURE THIS FILE NAME IS CORRECT** */
             background-image: url('cake.png');
             background-size: contain;
             background-repeat: no-repeat;
@@ -128,7 +132,7 @@
 <body>
 
     <div class="container">
-        <h1 id="greeting">Cake, Candles, Countdown!</h1>
+        <h1 id="greeting">Cake, Candles, Countdown!</</h1>
         <p id="message">Time left until the big day:</p>
         
         <div id="countdown">
@@ -157,7 +161,7 @@
     </div>
 
     <div id="finish-text" class="finish-message">
-        HAPPY BIRTHDAY! 🎂🥳
+        HAPPY BIRTHDAY GRACE! 🎂🥳
     </div>
 
     <script>
