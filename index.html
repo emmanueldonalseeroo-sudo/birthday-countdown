@@ -47,7 +47,7 @@
             min-height: 1.2em; 
         }
 
-        /* Countdown Timer Styling (Already fixed for mobile stacking) */
+        /* Countdown Timer Styling (Optimized for mobile stacking) */
         #countdown {
             display: flex;
             justify-content: center;
@@ -109,8 +109,8 @@
         /* General styles for image containers */
         #cyclist, #cake {
             position: absolute;
-            bottom: -5px; /* Aligns the image to sit on the road line */
-            height: auto; /* Allow image to define height */
+            bottom: -5px; /* Aligns the bottom of the image container with the road line */
+            height: auto; 
             transition: left 1s linear; 
         }
 
@@ -123,7 +123,7 @@
         #cyclist img {
             width: 100%;
             display: block;
-            vertical-align: bottom; /* Crucial for base alignment */
+            vertical-align: bottom; /* Ensures image base sits exactly on the line */
         }
 
         /* --- CAKE (Finish Line) --- */
@@ -135,7 +135,7 @@
         #cake img {
             width: 100%;
             display: block;
-            vertical-align: bottom; /* Crucial for base alignment */
+            vertical-align: bottom; 
         }
         
         .finish-message {
@@ -183,11 +183,11 @@
     </div>
 
     <div id="finish-text" class="finish-message">
-        HAPPY BIRTHDAY Grace! 🎂🥳
+        HAPPY BIRTHDAY GRACE! 🎂🥳
     </div>
 
     <script>
-        // --- JavaScript Logic (Calculates time and moves the cyclist) ---
+        // JavaScript remains the same for functionality
         const targetDateString = getComputedStyle(document.documentElement)
                                  .getPropertyValue('--birthday-target')
                                  .trim().replace(/"/g, '');
@@ -204,11 +204,9 @@
         
         const formatTime = (time) => time < 10 ? `0${time}` : time;
 
-        // The journey visually tracks the final 7 days leading up to the birthday.
         const journeyDurationMs = 7 * 24 * 60 * 60 * 1000; 
         const startOfJourney = birthdayDate - journeyDurationMs;
 
-        // Max horizontal position for the cyclist element (stops before hitting the cake)
         const maxPosition = 85; 
 
         function updateCountdown() {
@@ -226,22 +224,18 @@
                 minutesEl.textContent = formatTime(minutes);
                 secondsEl.textContent = formatTime(seconds);
                 
-                // Progress Bar Logic
                 let progressPercentage = 0;
                 
                 if (now >= startOfJourney) {
                     const timeElapsedInJourney = now - startOfJourney;
-                    // Calculate percentage of time *ELAPSED* in the journey
                     progressPercentage = Math.min(100, (timeElapsedInJourney / journeyDurationMs) * 100);
                 }
                 
-                // MOVEMENT: Left (0%) to Right (85%)
                 const cyclistPosition = (progressPercentage / 100) * maxPosition; 
 
                 cyclistEl.style.left = `${cyclistPosition}%`;
 
             } else {
-                // Birthday is here!
                 clearInterval(interval);
                 
                 messageEl.textContent = "It's time!";
@@ -250,7 +244,6 @@
                 document.querySelector('.progress-track').style.borderBottom = 'none';
                 finishTextEl.style.display = 'block';
                 
-                // Ensure final position is at the cake
                 cyclistEl.style.left = `${maxPosition}%`; 
             }
         }
