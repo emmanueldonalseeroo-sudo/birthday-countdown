@@ -1,284 +1,244 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday Countdown!</title>
-    <style>
-        /* --- TARGET DATE: 26 OCTOBER 2025 @ Midnight, Milan (UTC+02:00) --- */
-        :root {
-            --birthday-target: "2025-10-26T00:00:00+02:00"; 
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Countdown!</title>
+<style>
+:root {
+    --birthday-target: "2025-10-26T00:00:00+02:00";
+}
 
-        body {
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            background-color: #f7f7f7;
-            color: #333;
-            text-align: center;
-            padding: 10px;
-            box-sizing: border-box; 
-        }
+body {
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+    color: #333;
+    text-align: center;
+    padding: 10px;
+    box-sizing: border-box;
+}
 
-        .container {
-            width: 100%; 
-            max-width: 600px; 
-            padding: 20px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
+.container {
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
 
-        h1 {
-            color: #e94e77;
-            font-size: min(2.5em, 7vw); 
-            margin-bottom: 10px;
-        }
+h1 {
+    color: #e94e77;
+    font-size: min(2.5em, 7vw);
+    margin-bottom: 10px;
+}
 
-        #message {
-            font-size: 1.2em;
-            margin-bottom: 20px;
-            min-height: 1.2em; 
-        }
+#message {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    min-height: 1.2em;
+}
 
-        /* Countdown Timer Styling */
-        #countdown {
-            display: flex;
-            /* Use space-between for better gap distribution */
-            justify-content: space-between; 
-            margin-bottom: 30px;
-            flex-wrap: wrap; 
-            /* Remove gap property since we use space-between for main alignment */
-            padding: 0 5px; 
-        }
+/* Countdown Timer */
+#countdown {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+    padding: 0 5px;
+}
 
-        .timer-box {
-            background-color: #5bc0de;
-            color: white;
-            padding: 15px 10px; 
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            
-            /* Default for desktop/larger screens */
-            flex: 0 0 calc(25% - 15px); /* Forces 4 boxes with small gaps */
-            max-width: 120px; 
-        }
-        
-        /* FIX FOR MOBILE STACKING (Critical change here) */
-        @media (max-width: 500px) {
-            #countdown {
-                 gap: 5px; /* Re-introduce small gaps here */
-                 justify-content: center; /* Center boxes instead of space-between */
-            }
-            .timer-box {
-                /* Forces four boxes to fit on one row */
-                flex: 0 1 23%; 
-                padding: 10px 5px; 
-            }
-        }
+.timer-box {
+    background-color: #5bc0de;
+    color: white;
+    padding: 15px 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    flex: 0 0 calc(25% - 15px);
+    max-width: 120px;
+    margin-bottom: 10px;
+}
 
-        /* Handle extremely small screens (2x2 layout) */
-        @media (max-width: 340px) {
-            .timer-box {
-                /* Allow 2x2 wrapping */
-                flex: 1 1 45%; 
-                margin-bottom: 5px; 
-            }
-            #countdown {
-                justify-content: space-evenly;
-            }
-        }
+@media (max-width: 500px) {
+    #countdown {
+        justify-content: center;
+    }
+    .timer-box {
+        flex: 0 1 23%;
+        padding: 10px 5px;
+    }
+}
 
-        .timer-value {
-            font-size: min(2.5em, 8vw); 
-            font-weight: bold;
-            display: block;
-        }
+@media (max-width: 340px) {
+    .timer-box {
+        flex: 1 1 45%;
+    }
+    #countdown {
+        justify-content: space-evenly;
+    }
+}
 
-        .timer-label {
-            font-size: 0.7em; 
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: block;
-        }
-        
-        /* Progress Bar and Visuals */
-        .progress-track {
-            position: relative;
-            width: 90vw; 
-            max-width: 600px;
-            height: 100px; 
-            margin-top: 20px;
-            border-bottom: 5px solid #ccc; /* The 'road' line */
-        }
-        
-        /* General styles for image containers */
-        #cyclist, #cake {
-            position: absolute;
-            height: auto; 
-            width: auto; 
-            padding: 0;
-            margin: 0;
-            transition: left 1s linear; 
-        }
+.timer-value {
+    font-size: min(2.5em, 8vw);
+    font-weight: bold;
+    display: block;
+}
 
-        /* --- CYCLIST (Girl) --- */
-        #cyclist {
-            left: 0%; 
-        }
+.timer-label {
+    font-size: 0.7em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: block;
+}
 
-        /* Style the actual IMG tag inside the container */
-        #cyclist img {
-            /* CRITICAL FIX: Ensure image base aligns perfectly to the road line */
-            position: absolute;
-            bottom: 0px; /* Aligns base of image to the bottom of the track (which is the road line) */
-            
-            /* Enforce size for consistency */
-            width: 70px;
-            height: 70px; 
-            max-width: 70px;
-            max-height: 70px;
-            display: block;
-        }
+/* Progress Track */
+.progress-track {
+    position: relative;
+    width: 90vw;
+    max-width: 600px;
+    height: 120px;
+    margin-top: 20px;
+    border-bottom: 5px solid #ccc;
+    display: flex;
+    align-items: flex-end; /* bottom-align images */
+}
 
-        /* --- CAKE (Finish Line) --- */
-        #cake {
-            right: 0px; 
-        }
+#cyclist, #cake {
+    position: absolute;
+    bottom: 0;
+}
 
-        /* Style the actual IMG tag inside the container */
-        #cake img {
-             /* CRITICAL FIX: Ensure image base aligns perfectly to the road line */
-            position: absolute;
-            bottom: 0px; 
-            
-            /* Enforce size for consistency */
-            width: 100px; 
-            height: 100px;
-            max-width: 100px;
-            max-height: 100px;
-            display: block;
-        }
-        
-        .finish-message {
-            color: #e94e77;
-            font-size: 3em;
-            font-weight: bold;
-            margin-top: 50px;
-            display: none;
-        }
-    </style>
+#cyclist {
+    left: 0;
+    transition: left 1s linear; /* smooth movement */
+}
+
+#cake { right: 0; }
+
+#cyclist img, #cake img {
+    display: block;
+    width: auto;
+    height: auto;
+    max-height: 100px;
+}
+
+@media (max-width: 500px) {
+    .progress-track { height: 90px; }
+    #cyclist img, #cake img { max-height: 70px; }
+}
+
+.finish-message {
+    color: #e94e77;
+    font-size: 3em;
+    font-weight: bold;
+    margin-top: 50px;
+    display: none;
+}
+</style>
 </head>
 <body>
 
-    <div class="container">
-        <h1 id="greeting">The Birthday Countdown Has Begun!</h1>
-        <p id="message">Time left until the big day:</p>
-        
-        <div id="countdown">
-            <div class="timer-box">
-                <span id="days" class="timer-value">00</span>
-                <span class="timer-label">Days</span>
-            </div>
-            <div class="timer-box">
-                <span id="hours" class="timer-value">00</span>
-                <span class="timer-label">Hours</span>
-            </div>
-            <div class="timer-box">
-                <span id="minutes" class="timer-value">00</span>
-                <span class="timer-label">Minutes</span>
-            </div>
-            <div class="timer-box">
-                <span id="seconds" class="timer-value">00</span>
-                <span class="timer-label">Seconds</span>
-            </div>
+<div class="container">
+    <h1 id="greeting">The Birthday Countdown Has Begun!</h1>
+    <p id="message">Time left until the big day:</p>
+    <div id="countdown">
+        <div class="timer-box">
+            <span id="days" class="timer-value">00</span>
+            <span class="timer-label">Days</span>
+        </div>
+        <div class="timer-box">
+            <span id="hours" class="timer-value">00</span>
+            <span class="timer-label">Hours</span>
+        </div>
+        <div class="timer-box">
+            <span id="minutes" class="timer-value">00</span>
+            <span class="timer-label">Minutes</span>
+        </div>
+        <div class="timer-box">
+            <span id="seconds" class="timer-value">00</span>
+            <span class="timer-label">Seconds</span>
         </div>
     </div>
-    
-    <div class="progress-track">
-        <div id="cyclist">
-            <img src="girl.png" alt="Girl on a bicycle">
-        </div>
-        <div id="cake">
-            <img src="cake.png" alt="Birthday Cake">
-        </div>
-    </div>
+</div>
 
-    <div id="finish-text" class="finish-message">
-        HAPPY BIRTHDAY! 🎂🥳
-    </div>
+<div class="progress-track">
+    <div id="cyclist"><img src="girl.png" alt="Girl on a bicycle"></div>
+    <div id="cake"><img src="cake.png" alt="Birthday Cake"></div>
+</div>
 
-    <script>
-        // --- JavaScript Logic (Calculates time and moves the cyclist) ---
-        const targetDateString = getComputedStyle(document.documentElement)
-                                 .getPropertyValue('--birthday-target')
-                                 .trim().replace(/"/g, '');
-        const birthdayDate = new Date(targetDateString).getTime(); 
-        
-        const daysEl = document.getElementById('days');
-        const hoursEl = document.getElementById('hours');
-        const minutesEl = document.getElementById('minutes');
-        const secondsEl = document.getElementById('seconds');
-        const cyclistEl = document.getElementById('cyclist');
-        const messageEl = document.getElementById('message');
-        const countdownContainer = document.getElementById('countdown');
-        const finishTextEl = document.getElementById('finish-text');
-        
-        const formatTime = (time) => time < 10 ? `0${time}` : time;
+<div id="finish-text" class="finish-message">
+    HAPPY BIRTHDAY! 🎂🥳
+</div>
 
-        const journeyDurationMs = 7 * 24 * 60 * 60 * 1000; 
-        const startOfJourney = birthdayDate - journeyDurationMs;
+<script>
+// Read birthday target
+const targetDateString = getComputedStyle(document.documentElement)
+                         .getPropertyValue('--birthday-target')
+                         .trim().replace(/"/g, '');
+const birthdayDate = new Date(targetDateString).getTime();
 
-        const maxPosition = 85; 
+const daysEl = document.getElementById('days');
+const hoursEl = document.getElementById('hours');
+const minutesEl = document.getElementById('minutes');
+const secondsEl = document.getElementById('seconds');
+const cyclistEl = document.getElementById('cyclist');
+const messageEl = document.getElementById('message');
+const countdownContainer = document.getElementById('countdown');
+const finishTextEl = document.getElementById('finish-text');
 
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = birthdayDate - now;
+const formatTime = (time) => time < 10 ? `0${time}` : time;
 
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+const journeyDurationMs = 7 * 24 * 60 * 60 * 1000; 
+const startOfJourney = birthdayDate - journeyDurationMs;
+const maxPosition = 85; // max left percentage
 
-            if (distance > 0) {
-                daysEl.textContent = formatTime(days);
-                hoursEl.textContent = formatTime(hours);
-                minutesEl.textContent = formatTime(minutes);
-                secondsEl.textContent = formatTime(seconds);
-                
-                let progressPercentage = 0;
-                
-                if (now >= startOfJourney) {
-                    const timeElapsedInJourney = now - startOfJourney;
-                    progressPercentage = Math.min(100, (timeElapsedInJourney / journeyDurationMs) * 100);
-                }
-                
-                const cyclistPosition = (progressPercentage / 100) * maxPosition; 
+function updateCountdown() {
+    const now = Date.now();
+    const distance = birthdayDate - now;
 
-                cyclistEl.style.left = `${cyclistPosition}%`;
+    // Update countdown numbers
+    const days = Math.floor(distance / (1000*60*60*24));
+    const hours = Math.floor((distance % (1000*60*60*24)) / (1000*60*60));
+    const minutes = Math.floor((distance % (1000*60*60)) / (1000*60));
+    const seconds = Math.floor((distance % (1000*60)) / 1000);
 
-            } else {
-                clearInterval(interval);
-                
-                messageEl.textContent = "It's time!";
-                document.getElementById('greeting').textContent = '🥳 Happy Birthday! 🥳';
-                countdownContainer.style.display = 'none';
-                document.querySelector('.progress-track').style.borderBottom = 'none';
-                finishTextEl.style.display = 'block';
-                
-                cyclistEl.style.left = `${maxPosition}%`; 
-            }
+    if (distance > 0) {
+        daysEl.textContent = formatTime(days);
+        hoursEl.textContent = formatTime(hours);
+        minutesEl.textContent = formatTime(minutes);
+        secondsEl.textContent = formatTime(seconds);
+
+        // Smooth cyclist movement
+        let progressPercentage = 0;
+        if (now >= startOfJourney) {
+            progressPercentage = Math.min(100, ((now - startOfJourney) / journeyDurationMs) * 100);
         }
+        cyclistEl.style.left = `${(progressPercentage/100)*maxPosition}%`;
 
-        updateCountdown();
-        const interval = setInterval(updateCountdown, 1000);
-        
-    </script>
+    } else {
+        // Countdown finished
+        clearInterval(interval);
+        messageEl.textContent = "It's time!";
+        document.getElementById('greeting').textContent = '🥳 Happy Birthday! 🥳';
+        countdownContainer.style.display = 'none';
+        document.querySelector('.progress-track').style.borderBottom = 'none';
+        finishTextEl.style.display = 'block';
+        cyclistEl.style.left = `${maxPosition}%`;
+    }
+}
+
+// Initial update
+updateCountdown();
+
+// Update every 1 second
+const interval = setInterval(updateCountdown, 1000);
+</script>
 </body>
 </html>
